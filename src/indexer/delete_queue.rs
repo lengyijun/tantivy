@@ -2,7 +2,7 @@ use super::operation::DeleteOperation;
 use crate::Opstamp;
 use std::mem;
 use std::ops::DerefMut;
-use std::sync::{Arc, RwLock, Weak};
+use std::sync::{Arc, SgxRwLock as RwLock, Weak};
 
 // The DeleteQueue is similar in conceptually to a multiple
 // consumer single producer broadcast channel.

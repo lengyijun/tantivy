@@ -16,8 +16,8 @@ use std::io;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::result;
-use std::sync::RwLockWriteGuard;
-use std::sync::{Arc, RwLock};
+use std::sync::SgxRwLockWriteGuard as RwLockWriteGuard;
+use std::sync::{Arc, SgxRwLock as RwLock};
 
 /// Returns true iff the file is "managed".
 /// Non-managed file are not subject to garbage collection.

@@ -6,8 +6,8 @@ use crate::indexer::delete_queue::DeleteCursor;
 use crate::indexer::SegmentEntry;
 use std::collections::hash_set::HashSet;
 use std::fmt::{self, Debug, Formatter};
-use std::sync::RwLock;
-use std::sync::{RwLockReadGuard, RwLockWriteGuard};
+use std::sync::SgxRwLock as RwLock;
+use std::sync::{SgxRwLockReadGuard as RwLockReadGuard, SgxRwLockWriteGuard as RwLockWriteGuard};
 
 #[derive(Default)]
 struct SegmentRegisters {

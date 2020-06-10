@@ -13,7 +13,7 @@ use crate::directory::WatchCallback;
 use crate::directory::WatchCallbackList;
 use crate::directory::WatchHandle;
 use crate::directory::{TerminatingWrite, WritePtr};
-use fs2::FileExt;
+//use fs2::FileExt;
 use memmap::Mmap;
 use notify::RawEvent;
 use notify::RecursiveMode;
@@ -30,8 +30,8 @@ use std::path::{Path, PathBuf};
 use std::result;
 use std::sync::mpsc::{channel, Receiver, Sender};
 use std::sync::Arc;
-use std::sync::Mutex;
-use std::sync::RwLock;
+use std::sync::SgxMutex as Mutex;
+use std::sync::SgxRwLock as RwLock;
 use std::sync::Weak;
 use std::thread;
 use tempfile;
@@ -507,9 +507,9 @@ impl Directory for MmapDirectory {
             .open(&full_path)
             .map_err(LockError::IOError)?;
         if lock.is_blocking {
-            file.lock_exclusive().map_err(LockError::IOError)?;
+        //    file.lock_exclusive().map_err(LockError::IOError)?;
         } else {
-            file.try_lock_exclusive().map_err(|_| LockError::LockBusy)?
+            //file.try_lock_exclusive().map_err(|_| LockError::LockBusy)?
         }
         // dropping the file handle will release the lock.
         Ok(DirectoryLock::from(Box::new(ReleaseLockFile {

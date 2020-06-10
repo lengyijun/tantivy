@@ -20,7 +20,7 @@ use fail::fail_point;
 use std::collections::HashMap;
 use std::fmt;
 use std::sync::Arc;
-use std::sync::RwLock;
+use std::sync::SgxRwLock as RwLock;
 
 /// Entry point to access all of the datastructures of the `Segment`
 ///

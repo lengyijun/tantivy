@@ -1,5 +1,5 @@
-use std::fmt;
-use std::fmt::Write;
+use core::fmt;
+use core::fmt::Write;
 
 /// Defines whether a term in a query must be present,
 /// should be present or must be not present.

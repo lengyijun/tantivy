@@ -98,6 +98,11 @@
 //! [literate programming](https://tantivy-search.github.io/examples/basic_search.html) /
 //! [source code](https://github.com/tantivy-search/tantivy/blob/master/examples/basic_search.rs))
 
+#![no_std]
+use std::prelude::v1::*;
+#[macro_use]
+extern crate sgx_tstd as std;
+
 #[cfg_attr(test, macro_use)]
 extern crate serde_json;
 

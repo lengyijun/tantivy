@@ -1,7 +1,7 @@
 use futures::channel::oneshot;
 use futures::{Future, TryFutureExt};
 use std::sync::Arc;
-use std::sync::RwLock;
+use std::sync::SgxRwLock as RwLock;
 use std::sync::Weak;
 
 /// Type alias for callbacks registered when watching files of a `Directory`.

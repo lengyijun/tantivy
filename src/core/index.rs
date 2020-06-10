@@ -82,7 +82,8 @@ impl Index {
     /// Replace the default single thread search executor pool
     /// by a thread pool with a given number of threads.
     pub fn set_default_multithread_executor(&mut self) -> crate::Result<()> {
-        let default_num_threads = num_cpus::get();
+        //let default_num_threads = num_cpus::get();
+        let default_num_threads =  1;
         self.set_multithread_executor(default_num_threads)
     }
 
@@ -311,7 +312,8 @@ impl Index {
     /// # Panics
     /// If the heap size per thread is too small, panics.
     pub fn writer(&self, overall_heap_size_in_bytes: usize) -> crate::Result<IndexWriter> {
-        let mut num_threads = num_cpus::get();
+        //let mut num_threads = num_cpus::get();
+        let mut num_threads = 1;
         let heap_size_in_bytes_per_thread = overall_heap_size_in_bytes / num_threads;
         if heap_size_in_bytes_per_thread < HEAP_SIZE_MIN {
             num_threads = (overall_heap_size_in_bytes / HEAP_SIZE_MIN).max(1);
