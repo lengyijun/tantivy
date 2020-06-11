@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::BitSet;
 use crate::core::Searcher;
 use crate::core::SegmentReader;

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::tokenizer::stemmer::Language;
 use crate::tokenizer::tokenizer::TextAnalyzer;
 use crate::tokenizer::LowerCaser;

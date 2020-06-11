@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::BinarySerializable;
 use crate::common::CountingWriter;
 use crate::positions::{COMPRESSION_BLOCK_SIZE, LONG_SKIP_INTERVAL};

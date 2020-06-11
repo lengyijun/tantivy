@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::postings::compression::AlignedBuffer;
 
 /// This modules define the logic used to search for a doc in a given
@@ -78,12 +79,6 @@ impl BlockSearcher {
     /// Indeed, if the block is not full, the remaining items are TERMINATED.
     /// It is surprisingly faster, most likely because of the lack of branch misprediction.
     pub(crate) fn search_in_block(self, block_docs: &AlignedBuffer, target: u32) -> usize {
-        #[cfg(target_arch = "x86_64")]
-        {
-            if self == BlockSearcher::SSE2 {
-                return sse2::linear_search_sse2_128(block_docs, target);
-            }
-        }
         galloping(&block_docs.0[..], target)
     }
 }

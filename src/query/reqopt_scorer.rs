@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::docset::DocSet;
 use crate::query::score_combiner::ScoreCombiner;
 use crate::query::Scorer;

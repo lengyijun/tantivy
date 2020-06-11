@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 mod block_wand;
 mod boolean_query;
 mod boolean_weight;

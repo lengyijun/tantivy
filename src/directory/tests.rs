@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::*;
 use futures::channel::oneshot;
 use futures::executor::block_on;

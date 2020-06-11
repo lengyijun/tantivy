@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use once_cell::sync::Lazy;
 use std::path::PathBuf;
 

@@ -1,5 +1,6 @@
 //! Definition of Tantivy's error and result.
 
+use std::prelude::v1::*;
 use std::io;
 
 use crate::directory::error::{IOError, OpenDirectoryError, OpenReadError, OpenWriteError};
@@ -176,8 +177,8 @@ impl From<serde_json::Error> for TantivyError {
     }
 }
 
-impl From<rayon::ThreadPoolBuildError> for TantivyError {
-    fn from(error: rayon::ThreadPoolBuildError) -> TantivyError {
-        TantivyError::SystemError(error.to_string())
-    }
-}
+// impl From<rayon::ThreadPoolBuildError> for TantivyError {
+    // fn from(error: rayon::ThreadPoolBuildError) -> TantivyError {
+        // TantivyError::SystemError(error.to_string())
+    // }
+// }

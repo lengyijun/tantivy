@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 mod query_parser;
 
 pub mod logical_ast;

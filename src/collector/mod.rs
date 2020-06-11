@@ -84,6 +84,7 @@ See the `custom_collector` example.
 
 */
 
+use std::prelude::v1::*;
 use crate::DocId;
 use crate::Score;
 use crate::SegmentLocalId;

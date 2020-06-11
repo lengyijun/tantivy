@@ -1,3 +1,5 @@
+use std::prelude::v1::*;
+use std::prelude::v1::*;
 use super::segment::Segment;
 use crate::core::Executor;
 use crate::core::IndexMeta;
@@ -74,18 +76,18 @@ impl Index {
 
     /// Replace the default single thread search executor pool
     /// by a thread pool with a given number of threads.
-    pub fn set_multithread_executor(&mut self, num_threads: usize) -> crate::Result<()> {
-        self.executor = Arc::new(Executor::multi_thread(num_threads, "thrd-tantivy-search-")?);
-        Ok(())
-    }
+    // pub fn set_multithread_executor(&mut self, num_threads: usize) -> crate::Result<()> {
+        // self.executor = Arc::new(Executor::multi_thread(num_threads, "thrd-tantivy-search-")?);
+        // Ok(())
+    // }
 
     /// Replace the default single thread search executor pool
     /// by a thread pool with a given number of threads.
-    pub fn set_default_multithread_executor(&mut self) -> crate::Result<()> {
+    // pub fn set_default_multithread_executor(&mut self) -> crate::Result<()> {
         //let default_num_threads = num_cpus::get();
-        let default_num_threads =  1;
-        self.set_multithread_executor(default_num_threads)
-    }
+        // let default_num_threads =  1;
+        // self.set_multithread_executor(default_num_threads)
+    // }
 
     /// Creates a new index using the `RAMDirectory`.
     ///

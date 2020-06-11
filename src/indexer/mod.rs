@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 pub mod delete_queue;
 
 mod doc_opstamp_mapping;

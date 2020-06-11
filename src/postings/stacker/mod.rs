@@ -1,3 +1,5 @@
+use std::prelude::v1::*;
+use std::prelude::v1::*;
 mod expull;
 mod memory_arena;
 mod term_hashmap;

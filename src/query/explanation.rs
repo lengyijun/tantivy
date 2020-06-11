@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::{DocId, Score, TantivyError};
 use serde::Serialize;
 use std::fmt;

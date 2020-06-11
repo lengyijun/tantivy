@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 mod phrase_query;
 mod phrase_scorer;
 mod phrase_weight;

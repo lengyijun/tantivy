@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::docset::DocSet;
 use crate::DocId;
 use crate::Score;

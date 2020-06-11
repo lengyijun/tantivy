@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use docset::DocSet;
 use query::Scorer;
 use DocId;

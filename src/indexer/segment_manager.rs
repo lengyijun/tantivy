@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::segment_register::SegmentRegister;
 use crate::core::SegmentId;
 use crate::core::SegmentMeta;

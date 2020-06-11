@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::tokenizer::{BoxTokenStream, Token, TokenStream};
 use std::ops::DerefMut;
 

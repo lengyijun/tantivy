@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::collector::top_collector::{TopCollector, TopSegmentCollector};
 use crate::collector::{Collector, SegmentCollector};
 use crate::DocAddress;

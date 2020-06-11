@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::MAX_DOC_LIMIT;
 use crate::core::Segment;
 use crate::core::SegmentReader;

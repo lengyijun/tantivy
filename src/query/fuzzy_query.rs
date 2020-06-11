@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::query::{AutomatonWeight, Query, Weight};
 use crate::schema::Term;
 use crate::Searcher;

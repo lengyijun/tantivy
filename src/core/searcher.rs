@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::collector::Collector;
 use crate::core::Executor;
 use crate::core::InvertedIndexReader;

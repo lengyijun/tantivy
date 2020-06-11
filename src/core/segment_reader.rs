@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::CompositeFile;
 use crate::common::HasLen;
 use crate::core::InvertedIndexReader;

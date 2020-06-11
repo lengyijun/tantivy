@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use byteorder::{ByteOrder, LittleEndian, WriteBytesExt};
 use std::io;
 use std::ops::Deref;

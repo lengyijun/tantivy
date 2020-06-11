@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Collector;
 use crate::collector::custom_score_top_collector::CustomScoreTopCollector;
 use crate::collector::top_collector::TopSegmentCollector;

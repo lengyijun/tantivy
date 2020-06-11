@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::logical_ast::*;
 use crate::core::Index;
 use crate::query::BooleanQuery;

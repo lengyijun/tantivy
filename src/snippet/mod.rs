@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::query::Query;
 use crate::schema::Field;
 use crate::schema::Value;

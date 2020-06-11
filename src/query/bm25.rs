@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::fieldnorm::FieldNormReader;
 use crate::query::Explanation;
 use crate::Score;

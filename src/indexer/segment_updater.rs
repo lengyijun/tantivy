@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::segment_manager::{get_mergeable_segments, SegmentManager};
 use crate::core::Index;
 use crate::core::IndexMeta;

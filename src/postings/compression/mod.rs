@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::FixedSize;
 use bitpacking::{BitPacker, BitPacker4x};
 

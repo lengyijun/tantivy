@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use std::slice;
 
 /// Enum describing each component of a tantivy segment.

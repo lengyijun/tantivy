@@ -4,6 +4,8 @@ WORM directory abstraction.
 
 */
 
+use std::prelude::v1::*;
+
 #[cfg(feature = "mmap")]
 mod mmap_directory;
 

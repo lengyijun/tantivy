@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 mod term_query;
 mod term_scorer;
 mod term_weight;

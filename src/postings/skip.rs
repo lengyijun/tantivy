@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::{read_u32_vint_no_advance, serialize_vint_u32, BinarySerializable, VInt};
 use crate::directory::ReadOnlySource;
 use crate::postings::compression::{compressed_block_size, COMPRESSION_BLOCK_SIZE};

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::boolean_weight::BooleanWeight;
 use crate::query::Occur;
 use crate::query::Query;

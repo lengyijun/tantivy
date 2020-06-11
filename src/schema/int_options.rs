@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::flags::{FastFlag, IndexedFlag, SchemaFlagList, StoredFlag};
 use serde::{Deserialize, Serialize};
 use std::ops::BitOr;

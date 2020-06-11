@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::{BitSet, TinySet};
 use crate::docset::{DocSet, TERMINATED};
 use crate::DocId;

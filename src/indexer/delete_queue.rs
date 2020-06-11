@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::operation::DeleteOperation;
 use crate::Opstamp;
 use std::mem;

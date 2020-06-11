@@ -22,6 +22,7 @@
 //!
 //! Instead, you store and access your data via `.write(...)` and `.read(...)`, which under the hood
 //! stores your object using `ptr::write_unaligned` and `ptr::read_unaligned`.
+use std::prelude::v1::*;
 use std::mem;
 use std::ptr;
 

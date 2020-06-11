@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crossbeam::channel;
 
 /// Search executor whether search request are single thread or multithread.

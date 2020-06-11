@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Scorer;
 use crate::core::SegmentReader;
 use crate::query::Explanation;

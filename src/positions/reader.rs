@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::{BinarySerializable, FixedSize};
 use crate::directory::ReadOnlySource;
 use crate::positions::COMPRESSION_BLOCK_SIZE;

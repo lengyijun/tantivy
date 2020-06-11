@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::{fieldnorm_to_id, id_to_fieldnorm};
 use crate::common::CompositeFile;
 use crate::directory::ReadOnlySource;

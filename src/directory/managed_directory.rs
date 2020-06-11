@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::core::{MANAGED_FILEPATH, META_FILEPATH};
 use crate::directory::error::{DeleteError, IOError, LockError, OpenReadError, OpenWriteError};
 use crate::directory::footer::{Footer, FooterProxy};

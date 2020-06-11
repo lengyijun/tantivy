@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::BinarySerializable;
 use once_cell::sync::Lazy;
 use regex::Regex;

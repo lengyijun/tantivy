@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::TinySet;
 use crate::docset::{DocSet, TERMINATED};
 use crate::query::score_combiner::{DoNothingCombiner, ScoreCombiner};

@@ -1,4 +1,5 @@
 use std::prelude::v1::*;
+use std::prelude::v1::*;
 use super::SegmentComponent;
 use crate::core::SegmentId;
 use crate::schema::Schema;

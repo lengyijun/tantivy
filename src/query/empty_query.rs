@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Scorer;
 use crate::docset::TERMINATED;
 use crate::query::explanation::does_not_match;

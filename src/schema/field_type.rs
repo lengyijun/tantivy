@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use base64::decode;
 
 use crate::schema::Facet;

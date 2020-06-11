@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 #[inline(always)]
 pub fn id_to_fieldnorm(id: u8) -> u32 {
     FIELD_NORMS_TABLE[id as usize]
