@@ -1,5 +1,5 @@
-use crossbeam::crossbeam_channel::unbounded;
-use crossbeam::{Receiver, RecvError, Sender};
+use crossbeam::channel::unbounded;
+use crossbeam::channel::{Receiver, RecvError, Sender};
 use std::ops::{Deref, DerefMut};
 use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
