@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use std::prelude::v1::*;
 mod skiplist;
 mod skiplist_builder;
 
