@@ -1,5 +1,6 @@
-use core::fmt;
-use core::fmt::{Debug, Formatter};
+use std::prelude::v1::*;
+use std::fmt;
+use std::fmt::{Debug, Formatter};
 
 use crate::Occur;
 
