@@ -28,7 +28,6 @@ log = { git = "https://github.com/mesalock-linux/log-sgx", branch = "master", fe
 serde = { git = "https://github.com/mesalock-linux/serde-sgx", branch = "master", features = ["derive", "rc"] }
 serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx", branch = "master" }
 levenshtein_automata ={git="https://github.com/lengyijun/levenshtein-automata"}
-notify = {git="https://github.com/lengyijun/notify-sgx", optional=true}
 uuid = { git = "https://github.com/mesalock-linux/uuid-sgx", branch = "master", features = ["serde", "v1", "v3", "v4", "v5"] }
 crossbeam = {git="https://github.com/lengyijun/crossbeam"}
 futures = {git="https://github.com/lengyijun/futures-rs",  features=["thread-pool"] }
