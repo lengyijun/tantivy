@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::TermInfo;
 use crate::common::{BinarySerializable, VInt};
 use crate::common::{CompositeWrite, CountingWriter};

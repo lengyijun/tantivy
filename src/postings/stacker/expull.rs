@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::{Addr, MemoryArena};
 
 use crate::postings::stacker::memory_arena::load;

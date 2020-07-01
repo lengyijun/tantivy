@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::{BoxTokenStream, Token, TokenStream, Tokenizer};
 use crate::schema::FACET_SEP_BYTE;
 

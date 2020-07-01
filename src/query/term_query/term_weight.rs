@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::term_scorer::TermScorer;
 use crate::core::SegmentReader;
 use crate::docset::DocSet;

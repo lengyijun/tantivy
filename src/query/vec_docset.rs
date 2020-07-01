@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 #![allow(dead_code)]
 
 use crate::common::HasLen;

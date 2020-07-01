@@ -13,54 +13,51 @@ keywords = ["search", "information", "retrieval"]
 edition = "2018"
 
 [dependencies]
-base64 = "0.13"
-byteorder = "1"
-crc32fast = "1"
-once_cell = "1"
-regex ={version = "1", default-features = false, features = ["std"]}
-tantivy-fst = "0.3"
-memmap = {version = "0.7", optional=true}
-lz4 = {version="1", optional=true}
-brotli = {version="3.3.0", optional=true}
-snap = "1"
-tempfile = {version="3", optional=true}
-log = "0.4"
-serde = {version="1", features=["derive"]}
-serde_json = "1"
-num_cpus = "1"
-fs2={version="0.4", optional=true}
-levenshtein_automata = "0.2"
-uuid = { version = "0.8", features = ["v4", "serde"] }
-crossbeam = "0.8"
-futures = {version = "0.3",  features=["thread-pool"] }
-tantivy-query-grammar = { version="0.14.0", path="./query-grammar" }
-stable_deref_trait = "1"
-rust-stemmers = "1"
-downcast-rs = "1"
-bitpacking = {version="0.8", default-features = false, features=["bitpacker4x"]}
-census = "0.4"
-fnv = "1"
-thiserror = "1.0"
-htmlescape = "0.3"
-fail = "0.4"
-murmurhash32 = "0.2"
-chrono = "0.4"
-smallvec = "1"
-rayon = "1"
+base64 = { git = "https://github.com/mesalock-linux/rust-base64-sgx", branch = "master" }
+byteorder = { git = "https://github.com/mesalock-linux/byteorder-sgx", branch = "master" }
+crc32fast = { git = "https://github.com/mesalock-linux/rust-crc32fast-sgx", branch = "master" }
+once_cell = {git="https://github.com/lengyijun/once_cell"}
+regex = { git = "https://github.com/mesalock-linux/regex-sgx", branch = "master"}
+tantivy-fst = {git="https://github.com/lengyijun/fst-sgx"}
+#memmap = {git="https://github.com/lengyijun/memmap-rs", optional=true}
+lz4 = {version="1.20", optional=true}
+snap = { git = "https://github.com/lengyijun/rust-snappy", branch = "master" }
+tempfile = {git="https://github.com/lengyijun/tempfile"}
+log = { git = "https://github.com/mesalock-linux/log-sgx", branch = "master", features = ["kv_unstable"] }
+serde = { git = "https://github.com/mesalock-linux/serde-sgx", branch = "master", features = ["derive", "rc"] }
+serde_json = { git = "https://github.com/mesalock-linux/serde-json-sgx", branch = "master" }
+levenshtein_automata ={git="https://github.com/lengyijun/levenshtein-automata"}
+uuid = { git = "https://github.com/mesalock-linux/uuid-sgx", branch = "master", features = ["serde", "v1", "v3", "v4", "v5"] }
+crossbeam = {git="https://github.com/lengyijun/crossbeam"}
+futures = {git="https://github.com/lengyijun/futures-rs",  features=["thread-pool"] }
+owning_ref = {git="https://github.com/remexre/owning-ref-rs",branch="no_std",default-features = false}
+stable_deref_trait = {git="https://github.com/lengyijun/stable_deref_trait",branch="master"}
+rust-stemmers = {git="https://github.com/lengyijun/rust-stemmers"}
+downcast-rs = {git="https://github.com/lengyijun/downcast-rs"}
+tantivy-query-grammar = { version="0.14", path="./query-grammar" }
+bitpacking = {git="https://github.com/lengyijun/bitpacking", default-features = false, features=["bitpacker4x"]}
+census = {git="https://github.com/lengyijun/census"}
+fnv = { git = "https://github.com/mesalock-linux/rust-fnv-sgx", branch = "master" }
+owned-read = {git="https://github.com/lengyijun/owned-read"}
+thiserror= { git = "https://github.com/mesalock-linux/thiserror-sgx", branch = "master" }
+htmlescape = {git="https://github.com/lengyijun/rust-htmlescape"}
+fail = {git="https://github.com/lengyijun/fail-rs"}
+murmurhash32 = {git="https://github.com/lengyijun/murmurhash32"}
+chrono = { git = "https://github.com/mesalock-linux/chrono-sgx", branch = "master" }
+smallvec = { git = "https://github.com/mesalock-linux/rust-smallvec-sgx", features = ["write", "union", "specialization", "may_dangle"] }
 lru = "0.6"
 
-[target.'cfg(windows)'.dependencies]
-winapi = "0.3"
+[target.'cfg(not(target_env = "sgx"))'.dependencies]
+sgx_tstd = { version = "1.0", rev = "v1.1.3", git = "https://github.com/apache/teaclave-sgx-sdk.git", features=["untrusted_fs","thread", "backtrace"] }
 
 [dev-dependencies]
-rand = "0.8"
+rand = { git = "https://github.com/mesalock-linux/rand-sgx", tag = "v0.7.3_sgx1.1.3", features = ["small_rng"] }
 maplit = "1"
 matches = "0.1.8"
 proptest = "0.10"
-criterion = "0.3"
 
 [dev-dependencies.fail]
-version = "0.4"
+git="https://github.com/lengyijun/fail-rs"
 features = ["failpoints"]
 
 [profile.release]
@@ -74,12 +71,11 @@ overflow-checks = true
 
 [features]
 default = ["mmap"]
-mmap = ["fs2", "tempfile", "memmap"]
-brotli-compression = ["brotli"]
+mmap = []
 lz4-compression = ["lz4"]
 failpoints = ["fail/failpoints"]
 unstable = [] # useful for benches.
-wasm-bindgen = ["uuid/wasm-bindgen"]
+scoref64 = [] # scores are f64 instead of f32. was introduced to debug blockwand.
 
 [workspace]
 members = ["query-grammar"]

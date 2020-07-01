@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::segment_manager::{get_mergeable_segments, SegmentManager};
 use crate::core::Index;
 use crate::core::IndexMeta;
@@ -30,7 +31,7 @@ use std::ops::Deref;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-use std::sync::RwLock;
+use std::sync::SgxRwLock as RwLock;
 
 const NUM_MERGE_THREADS: usize = 4;
 

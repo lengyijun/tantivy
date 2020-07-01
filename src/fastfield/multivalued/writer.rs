@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::fastfield::serializer::FastSingleFieldSerializer;
 use crate::fastfield::value_to_u64;
 use crate::fastfield::FastFieldSerializer;

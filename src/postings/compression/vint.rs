@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 #[inline(always)]
 pub fn compress_sorted<'a>(input: &[u32], output: &'a mut [u8], mut offset: u32) -> &'a [u8] {
     let mut byte_written = 0;

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::FastValue;
 use crate::common::bitpacker::BitUnpacker;
 use crate::common::compute_num_bits;

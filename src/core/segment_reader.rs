@@ -19,7 +19,7 @@ use crate::{common::CompositeFile, error::DataCorruption};
 use fail::fail_point;
 use std::fmt;
 use std::sync::Arc;
-use std::sync::RwLock;
+use std::sync::SgxRwLock as RwLock;
 use std::{collections::HashMap, io};
 
 /// Entry point to access all of the datastructures of the `Segment`

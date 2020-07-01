@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::decompress;
 use super::index::SkipIndex;
 use crate::common::VInt;
@@ -11,7 +12,7 @@ use lru::LruCache;
 use std::io;
 use std::mem::size_of;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, SgxMutex as Mutex};
 
 const LRU_CACHE_CAPACITY: usize = 100;
 

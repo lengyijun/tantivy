@@ -10,6 +10,7 @@
 //! assert_eq!(stream.next().unwrap().text, "crafty");
 //! assert!(stream.next().is_none());
 //! ```
+use std::prelude::v1::*;
 use super::{Token, TokenFilter, TokenStream};
 use crate::tokenizer::BoxTokenStream;
 use fnv::FnvHasher;

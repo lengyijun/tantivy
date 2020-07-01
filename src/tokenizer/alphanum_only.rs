@@ -19,6 +19,7 @@
 //! // the "emoji" is dropped because its not an alphanum
 //! assert!(stream.next().is_none());
 //! ```
+use std::prelude::v1::*;
 use super::{BoxTokenStream, Token, TokenFilter, TokenStream};
 
 /// `TokenFilter` that removes all tokens that contain non

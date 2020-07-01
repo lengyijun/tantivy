@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::postings::compression::AlignedBuffer;
 
 /// This modules define the logic used to search for a doc in a given
@@ -5,63 +6,6 @@ use crate::postings::compression::AlignedBuffer;
 ///
 /// Searching within a block is a hotspot when running intersection.
 /// so it was worth defining it in its own module.
-
-#[cfg(target_arch = "x86_64")]
-mod sse2 {
-    use crate::postings::compression::{AlignedBuffer, COMPRESSION_BLOCK_SIZE};
-    use std::arch::x86_64::__m128i as DataType;
-    use std::arch::x86_64::_mm_add_epi32 as op_add;
-    use std::arch::x86_64::_mm_cmplt_epi32 as op_lt;
-    use std::arch::x86_64::_mm_load_si128 as op_load; // requires 128-bits alignment
-    use std::arch::x86_64::_mm_set1_epi32 as set1;
-    use std::arch::x86_64::_mm_setzero_si128 as set0;
-    use std::arch::x86_64::_mm_sub_epi32 as op_sub;
-    use std::arch::x86_64::{_mm_cvtsi128_si32, _mm_shuffle_epi32};
-
-    const MASK1: i32 = 78;
-    const MASK2: i32 = 177;
-
-    /// Performs an exhaustive linear search over the
-    ///
-    /// There is no early exit here. We simply count the
-    /// number of elements that are `< target`.
-    pub(crate) fn linear_search_sse2_128(arr: &AlignedBuffer, target: u32) -> usize {
-        unsafe {
-            let ptr = arr as *const AlignedBuffer as *const DataType;
-            let vkey = set1(target as i32);
-            let mut cnt = set0();
-            // We work over 4 `__m128i` at a time.
-            // A single `__m128i` actual contains 4 `u32`.
-            for i in 0..(COMPRESSION_BLOCK_SIZE as isize) / (4 * 4) {
-                let cmp1 = op_lt(op_load(ptr.offset(i * 4)), vkey);
-                let cmp2 = op_lt(op_load(ptr.offset(i * 4 + 1)), vkey);
-                let cmp3 = op_lt(op_load(ptr.offset(i * 4 + 2)), vkey);
-                let cmp4 = op_lt(op_load(ptr.offset(i * 4 + 3)), vkey);
-                let sum = op_add(op_add(cmp1, cmp2), op_add(cmp3, cmp4));
-                cnt = op_sub(cnt, sum);
-            }
-            cnt = op_add(cnt, _mm_shuffle_epi32(cnt, MASK1));
-            cnt = op_add(cnt, _mm_shuffle_epi32(cnt, MASK2));
-            _mm_cvtsi128_si32(cnt) as usize
-        }
-    }
-
-    #[cfg(test)]
-    mod test {
-        use super::linear_search_sse2_128;
-        use crate::postings::compression::{AlignedBuffer, COMPRESSION_BLOCK_SIZE};
-
-        #[test]
-        fn test_linear_search_sse2_128_u32() {
-            let mut block = [0u32; COMPRESSION_BLOCK_SIZE];
-            for el in 0u32..128u32 {
-                block[el as usize] = el * 2 + 1 << 18;
-            }
-            let target = block[64] + 1;
-            assert_eq!(linear_search_sse2_128(&AlignedBuffer(block), target), 65);
-        }
-    }
-}
 
 /// This `linear search` browser exhaustively through the array.
 /// but the early exit is very difficult to predict.
@@ -135,12 +79,6 @@ impl BlockSearcher {
     /// Indeed, if the block is not full, the remaining items are TERMINATED.
     /// It is surprisingly faster, most likely because of the lack of branch misprediction.
     pub(crate) fn search_in_block(self, block_docs: &AlignedBuffer, target: u32) -> usize {
-        #[cfg(target_arch = "x86_64")]
-        {
-            if self == BlockSearcher::SSE2 {
-                return sse2::linear_search_sse2_128(block_docs, target);
-            }
-        }
         galloping(&block_docs.0[..], target)
     }
 }

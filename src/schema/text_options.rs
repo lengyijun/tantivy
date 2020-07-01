@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::flags::SchemaFlagList;
 use crate::schema::flags::StoredFlag;
 use crate::schema::IndexRecordOption;

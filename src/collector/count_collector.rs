@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Collector;
 use crate::collector::SegmentCollector;
 use crate::DocId;

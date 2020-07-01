@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::docset::DocSet;
 
 /// Postings (also called inverted list)

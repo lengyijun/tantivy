@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::operation::AddOperation;
 use crate::core::Segment;
 use crate::core::SerializableSegment;

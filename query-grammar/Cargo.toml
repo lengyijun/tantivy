@@ -13,4 +13,8 @@ keywords = ["search", "information", "retrieval"]
 edition = "2018"
 
 [dependencies]
-combine = {version="4", default-features=false, features=[] }
+combine = {git="https://github.com/lengyijun/combine", default-features=false  }
+
+[target.'cfg(not(target_env = "sgx"))'.dependencies]
+sgx_tstd = { version = "1.0", rev = "v1.1.3", git = "https://github.com/apache/teaclave-sgx-sdk.git", features=["untrusted_fs","thread", "backtrace"] }
+

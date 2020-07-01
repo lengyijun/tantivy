@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Collector;
 use crate::collector::top_collector::{ComparableDoc, TopCollector};
 use crate::collector::tweak_score_top_collector::TweakedScoreTopCollector;

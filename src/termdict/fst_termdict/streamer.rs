@@ -1,5 +1,5 @@
+use std::prelude::v1::*;
 use std::io;
-
 use super::TermDictionary;
 use crate::postings::TermInfo;
 use crate::termdict::TermOrdinal;

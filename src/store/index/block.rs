@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::VInt;
 use crate::store::index::{Checkpoint, CHECKPOINT_PERIOD};
 use crate::DocId;

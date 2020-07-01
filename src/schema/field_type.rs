@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::bytes_options::BytesOptions;
 use crate::schema::Facet;
 use crate::schema::IndexRecordOption;

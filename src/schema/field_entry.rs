@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::TextOptions;
 use crate::schema::{is_valid_field_name, IntOptions};
 

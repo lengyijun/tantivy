@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::IndexWriter;
 use crate::Opstamp;
 use futures::executor::block_on;

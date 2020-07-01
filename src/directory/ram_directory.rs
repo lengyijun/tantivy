@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::directory::error::{DeleteError, OpenReadError, OpenWriteError};
 use crate::directory::AntiCallToken;
 use crate::directory::WatchCallbackList;
@@ -10,7 +11,7 @@ use std::fmt;
 use std::io::{self, BufWriter, Cursor, Seek, SeekFrom, Write};
 use std::path::{Path, PathBuf};
 use std::result;
-use std::sync::{Arc, RwLock};
+use std::sync::{Arc, SgxRwLock as RwLock};
 
 use super::FileHandle;
 
@@ -88,8 +89,10 @@ struct InnerDirectory {
 
 impl InnerDirectory {
     fn write(&mut self, path: PathBuf, data: &[u8]) -> bool {
-        let data = FileSlice::from(data.to_vec());
-        self.fs.insert(path, data).is_some()
+        let x:Vec<u8>=data.to_vec();
+
+        let file_slice= FileSlice::from(x);
+        self.fs.insert(path, file_slice).is_some()
     }
 
     fn open_read(&self, path: &Path) -> Result<FileSlice, OpenReadError> {

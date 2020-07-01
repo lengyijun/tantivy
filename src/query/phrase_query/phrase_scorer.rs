@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::docset::{DocSet, TERMINATED};
 use crate::fieldnorm::FieldNormReader;
 use crate::postings::Postings;

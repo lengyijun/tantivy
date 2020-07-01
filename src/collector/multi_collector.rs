@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Collector;
 use super::SegmentCollector;
 use crate::collector::Fruit;

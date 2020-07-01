@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::Term;
 use crate::termdict::TermOrdinal;
 use crate::termdict::TermStreamer;

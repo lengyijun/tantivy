@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::PhraseScorer;
 use crate::core::SegmentReader;
 use crate::fieldnorm::FieldNormReader;

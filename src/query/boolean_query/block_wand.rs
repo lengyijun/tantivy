@@ -3,6 +3,7 @@ use crate::query::Scorer;
 use crate::{DocId, DocSet, Score, TERMINATED};
 use std::ops::Deref;
 use std::ops::DerefMut;
+use std::vec::Vec;
 
 /// Takes a term_scorers sorted by their current doc() and a threshold and returns
 /// Returns (pivot_len, pivot_ord) defined as follows:

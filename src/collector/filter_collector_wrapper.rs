@@ -9,6 +9,7 @@
 
 // ---
 // Importing tantivy...
+use std::prelude::v1::*;
 use std::marker::PhantomData;
 
 use crate::collector::{Collector, SegmentCollector};

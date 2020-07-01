@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::BinarySerializable;
 use byteorder::{ByteOrder, LittleEndian};
 use std::io;

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::Document;
 use crate::schema::Term;
 use crate::Opstamp;

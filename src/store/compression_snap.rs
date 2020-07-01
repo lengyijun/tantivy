@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use std::io::{self, Read, Write};
 
 /// Name of the compression scheme used in the doc store.

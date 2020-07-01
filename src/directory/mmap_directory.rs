@@ -1,4 +1,4 @@
-use crate::core::META_FILEPATH;
+use std::prelude::v1::*;
 use crate::directory::error::LockError;
 use crate::directory::error::{DeleteError, OpenDirectoryError, OpenReadError, OpenWriteError};
 use crate::directory::file_watcher::FileWatcher;
@@ -10,20 +10,22 @@ use crate::directory::WatchHandle;
 use crate::directory::{AntiCallToken, FileHandle, OwnedBytes};
 use crate::directory::{ArcBytes, WeakArcBytes};
 use crate::directory::{TerminatingWrite, WritePtr};
-use fs2::FileExt;
-use memmap::Mmap;
+//use fs2::FileExt;
+//use memmap::Mmap;
 use serde::{Deserialize, Serialize};
 use stable_deref_trait::StableDeref;
 use std::convert::From;
 use std::fmt;
-use std::fs::OpenOptions;
+//use std::fs::OpenOptions;
 use std::fs::{self, File};
 use std::io::{self, Seek, SeekFrom};
 use std::io::{BufWriter, Read, Write};
 use std::path::{Path, PathBuf};
 use std::result;
 use std::sync::Arc;
-use std::sync::RwLock;
+use std::sync::SgxRwLock as RwLock;
+use std::sgxfs::SgxFile;
+// use std::sgxfs::OpenOptions;
 use std::{collections::HashMap, ops::Deref};
 use tempfile::TempDir;
 
@@ -34,30 +36,30 @@ pub(crate) fn make_io_err(msg: String) -> io::Error {
 
 /// Returns None iff the file exists, can be read, but is empty (and hence
 /// cannot be mmapped)
-fn open_mmap(full_path: &Path) -> result::Result<Option<Mmap>, OpenReadError> {
-    let file = File::open(full_path).map_err(|io_err| {
-        if io_err.kind() == io::ErrorKind::NotFound {
-            OpenReadError::FileDoesNotExist(full_path.to_path_buf())
-        } else {
-            OpenReadError::wrap_io_error(io_err, full_path.to_path_buf())
-        }
-    })?;
-
-    let meta_data = file
-        .metadata()
-        .map_err(|io_err| OpenReadError::wrap_io_error(io_err, full_path.to_owned()))?;
-    if meta_data.len() == 0 {
+//fn open_mmap(full_path: &Path) -> result::Result<Option<Mmap>, OpenReadError> {
+//    let file = File::open(full_path).map_err(|io_err| {
+//        if io_err.kind() == io::ErrorKind::NotFound {
+//            OpenReadError::FileDoesNotExist(full_path.to_path_buf())
+//        } else {
+//            OpenReadError::wrap_io_error(io_err, full_path.to_path_buf())
+//        }
+//    })?;
+//
+//    let meta_data = file
+//        .metadata()
+//        .map_err(|io_err| OpenReadError::wrap_io_error(io_err, full_path.to_owned()))?;
+//    if meta_data.len() == 0 {
         // if the file size is 0, it will not be possible
         // to mmap the file, so we return None
         // instead.
-        return Ok(None);
-    }
-    unsafe {
-        memmap::Mmap::map(&file)
-            .map(Some)
-            .map_err(|io_err| OpenReadError::wrap_io_error(io_err, full_path.to_path_buf()))
-    }
-}
+//        return Ok(None);
+//    }
+//    unsafe {
+//        memmap::Mmap::map(&file)
+//            .map(Some)
+//            .map_err(|io_err| OpenReadError::wrap_io_error(io_err, full_path.to_path_buf()))
+//    }
+//}
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CacheCounters {
@@ -119,13 +121,17 @@ impl MmapCache {
         }
         self.cache.remove(full_path);
         self.counters.miss += 1;
-        let mmap_opt = open_mmap(full_path)?;
-        Ok(mmap_opt.map(|mmap| {
-            let mmap_arc: ArcBytes = Arc::new(mmap);
-            let mmap_weak = Arc::downgrade(&mmap_arc);
-            self.cache.insert(full_path.to_owned(), mmap_weak);
-            mmap_arc
-        }))
+        let raw_data:Vec<u8>=match std::sgxfs::read(full_path){
+          Ok(t)=>{t}
+          _=>{
+            return Err(OpenReadError::FileDoesNotExist(full_path.to_owned()))
+          }
+        };
+
+        let mmap_arc: ArcBytes = Arc::new(raw_data);
+        let mmap_weak = Arc::downgrade(&mmap_arc);
+        self.cache.insert(full_path.to_owned(), mmap_weak);
+        Ok(Some(mmap_arc))
     }
 }
 
@@ -150,7 +156,6 @@ struct MmapDirectoryInner {
     root_path: PathBuf,
     mmap_cache: RwLock<MmapCache>,
     _temp_directory: Option<TempDir>,
-    watcher: FileWatcher,
 }
 
 impl MmapDirectoryInner {
@@ -158,14 +163,10 @@ impl MmapDirectoryInner {
         MmapDirectoryInner {
             mmap_cache: Default::default(),
             _temp_directory: temp_directory,
-            watcher: FileWatcher::new(&root_path.join(*META_FILEPATH)),
             root_path,
         }
     }
 
-    fn watch(&self, callback: WatchCallback) -> crate::Result<WatchHandle> {
-        Ok(self.watcher.watch(callback))
-    }
 }
 
 impl fmt::Debug for MmapDirectory {
@@ -223,7 +224,7 @@ impl MmapDirectory {
     /// In certain FS, this is required to persistently create
     /// a file.
     fn sync_directory(&self) -> Result<(), io::Error> {
-        let mut open_opts = OpenOptions::new();
+        let mut open_opts = std::fs::OpenOptions::new();
 
         // Linux needs read to be set, otherwise returns EINVAL
         // write must not be set, or it fails with EISDIR
@@ -282,10 +283,10 @@ impl Drop for ReleaseLockFile {
 
 /// This Write wraps a File, but has the specificity of
 /// call `sync_all` on flush.
-struct SafeFileWriter(File);
+struct SafeFileWriter(SgxFile);
 
 impl SafeFileWriter {
-    fn new(file: File) -> SafeFileWriter {
+    fn new(file: SgxFile) -> SafeFileWriter {
         SafeFileWriter(file)
     }
 }
@@ -296,8 +297,8 @@ impl Write for SafeFileWriter {
     }
 
     fn flush(&mut self) -> io::Result<()> {
-        self.0.flush()?;
-        self.0.sync_all()
+        self.0.flush()
+        //self.0.sync_all()
     }
 }
 
@@ -327,20 +328,21 @@ unsafe impl StableDeref for MmapArc {}
 
 /// Writes a file in an atomic manner.
 pub(crate) fn atomic_write(path: &Path, content: &[u8]) -> io::Result<()> {
-    // We create the temporary file in the same directory as the target file.
-    // Indeed the canonical temp directory and the target file might sit in different
-    // filesystem, in which case the atomic write may actually not work.
-    let parent_path = path.parent().ok_or_else(|| {
-        io::Error::new(
-            io::ErrorKind::InvalidInput,
-            "Path {:?} does not have parent directory.",
-        )
-    })?;
-    let mut tempfile = tempfile::Builder::new().tempfile_in(&parent_path)?;
-    tempfile.write_all(content)?;
-    tempfile.flush()?;
-    tempfile.into_temp_path().persist(path)?;
-    Ok(())
+        let open_res = std::sgxfs::OpenOptions::new()
+            .write(true)
+            .update(true)
+            .open(&path);
+
+        let file = open_res.map_err(|io_err| {
+            if io_err.kind() == io::ErrorKind::AlreadyExists {
+                OpenWriteError::FileAlreadyExists(path.to_owned())
+            } else {
+                OpenWriteError::wrap_io_error(io_err, path.to_path_buf())
+            }
+        });
+
+        file.unwrap().write(content);
+        Ok(())
 }
 
 impl Directory for MmapDirectory {
@@ -400,9 +402,9 @@ impl Directory for MmapDirectory {
         debug!("Open Write {:?}", path);
         let full_path = self.resolve_path(path);
 
-        let open_res = OpenOptions::new()
+        let open_res = std::sgxfs::OpenOptions::new()
             .write(true)
-            .create_new(true)
+            //.create_new(true)
             .open(full_path);
 
         let mut file = open_res.map_err(|io_err| {
@@ -429,7 +431,7 @@ impl Directory for MmapDirectory {
     fn atomic_read(&self, path: &Path) -> Result<Vec<u8>, OpenReadError> {
         let full_path = self.resolve_path(path);
         let mut buffer = Vec::new();
-        match File::open(&full_path) {
+        match std::sgxfs::SgxFile::open(&full_path) {
             Ok(mut file) => {
                 file.read_to_end(&mut buffer).map_err(|io_error| {
                     OpenReadError::wrap_io_error(io_error, path.to_path_buf())
@@ -456,15 +458,15 @@ impl Directory for MmapDirectory {
     fn acquire_lock(&self, lock: &Lock) -> Result<DirectoryLock, LockError> {
         let full_path = self.resolve_path(&lock.filepath);
         // We make sure that the file exists.
-        let file: File = OpenOptions::new()
+        let file: File = std::fs::OpenOptions::new()
             .write(true)
             .create(true) //< if the file does not exist yet, create it.
             .open(&full_path)
             .map_err(LockError::IOError)?;
         if lock.is_blocking {
-            file.lock_exclusive().map_err(LockError::IOError)?;
+            //file.lock_exclusive().map_err(LockError::IOError)?;
         } else {
-            file.try_lock_exclusive().map_err(|_| LockError::LockBusy)?
+          //  file.try_lock_exclusive().map_err(|_| LockError::LockBusy)?
         }
         // dropping the file handle will release the lock.
         Ok(DirectoryLock::from(Box::new(ReleaseLockFile {
@@ -474,7 +476,7 @@ impl Directory for MmapDirectory {
     }
 
     fn watch(&self, watch_callback: WatchCallback) -> crate::Result<WatchHandle> {
-        self.inner.watch(watch_callback)
+      panic!("no watcher in mmap_directory of SGX version. Use Manual ReloadPolicy");
     }
 }
 

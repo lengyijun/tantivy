@@ -1,5 +1,6 @@
 mod pool;
 
+use std::prelude::v1::*;
 pub use self::pool::LeasedItem;
 use self::pool::Pool;
 use crate::core::Segment;
@@ -50,7 +51,8 @@ pub struct IndexReaderBuilder {
 impl IndexReaderBuilder {
     pub(crate) fn new(index: Index) -> IndexReaderBuilder {
         IndexReaderBuilder {
-            num_searchers: num_cpus::get(),
+		//TODO
+            num_searchers: 8,
             reload_policy: ReloadPolicy::OnCommit,
             index,
         }

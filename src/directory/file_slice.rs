@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use stable_deref_trait::StableDeref;
 
 use crate::common::HasLen;

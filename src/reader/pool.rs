@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crossbeam::channel::unbounded;
 use crossbeam::channel::{Receiver, RecvError, Sender};
 use std::ops::{Deref, DerefMut};

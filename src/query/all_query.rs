@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::core::Searcher;
 use crate::core::SegmentReader;
 use crate::docset::{DocSet, TERMINATED};

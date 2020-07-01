@@ -1,3 +1,8 @@
+#![no_std]
+use std::prelude::v1::*;
+#[macro_use]
+extern crate sgx_tstd as std;
+
 mod occur;
 mod query_grammar;
 mod user_input_ast;

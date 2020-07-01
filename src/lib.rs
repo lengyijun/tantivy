@@ -98,6 +98,11 @@
 //! [literate programming](https://tantivy-search.github.io/examples/basic_search.html) /
 //! [source code](https://github.com/tantivy-search/tantivy/blob/main/examples/basic_search.rs))
 
+#![no_std]
+use std::prelude::v1::*;
+#[macro_use]
+extern crate sgx_tstd as std;
+
 #[cfg_attr(test, macro_use)]
 extern crate serde_json;
 
@@ -976,5 +981,13 @@ mod tests {
         let index = Index::create_in_dir(&index_path, schema)?;
         assert!(index.validate_checksum()?.is_empty());
         Ok(())
+    }
+
+    #[test]
+    fn test_validate_checksum() {
+        let index_path = tempfile::tempdir().expect("dir");
+        let schema = Schema::builder().build();
+        let index = Index::create_in_dir(&index_path, schema).expect("index");
+        assert!(index.validate_checksum().unwrap().is_empty());
     }
 }

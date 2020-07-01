@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::tokenizer::stemmer::Language;
 use crate::tokenizer::tokenizer::TextAnalyzer;
 use crate::tokenizer::LowerCaser;
@@ -6,7 +7,7 @@ use crate::tokenizer::RemoveLongFilter;
 use crate::tokenizer::SimpleTokenizer;
 use crate::tokenizer::Stemmer;
 use std::collections::HashMap;
-use std::sync::{Arc, RwLock};
+use std::sync::{Arc, SgxRwLock as RwLock};
 
 /// The tokenizer manager serves as a store for
 /// all of the pre-configured tokenizer pipelines.

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::Value;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;

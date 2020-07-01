@@ -9,6 +9,7 @@ details into consideration. For example, if your file system block size is 4096 
 under-count actual resultant space usage by up to 4095 bytes per file.
 */
 
+use std::prelude::v1::*;
 use crate::schema::Field;
 use crate::SegmentComponent;
 use serde::{Deserialize, Serialize};

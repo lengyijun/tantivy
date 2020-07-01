@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::bitpacker::BitPacker;
 use crate::common::compute_num_bits;
 use crate::common::BinarySerializable;

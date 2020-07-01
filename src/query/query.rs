@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::Weight;
 use crate::core::searcher::Searcher;
 use crate::query::Explanation;

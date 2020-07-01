@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::multivalued::MultiValuedFastFieldWriter;
 use crate::common;
 use crate::common::BinarySerializable;

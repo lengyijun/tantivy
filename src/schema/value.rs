@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::Facet;
 use crate::tokenizer::PreTokenizedString;
 use crate::DateTime;
@@ -265,6 +266,7 @@ impl From<PreTokenizedString> for Value {
 }
 
 mod binary_serialize {
+    use std::prelude::v1::*;
     use super::Value;
     use crate::common::{f64_to_u64, u64_to_f64, BinarySerializable};
     use crate::schema::Facet;

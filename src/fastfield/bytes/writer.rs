@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use std::io;
 
 use crate::fastfield::serializer::FastFieldSerializer;

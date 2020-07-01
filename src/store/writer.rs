@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::compress;
 use super::index::SkipIndexBuilder;
 use super::StoreReader;

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::HasLen;
 use crate::docset::DocSet;
 use crate::fastfield::DeleteBitSet;
@@ -137,6 +138,51 @@ impl SegmentPostings {
             IndexRecordOption::WithFreqs,
         )
         .unwrap();
+        SegmentPostings::from_block_postings(block_segment_postings, None)
+    }
+
+    /// Helper functions to create `SegmentPostings` for tests.
+    #[cfg(test)]
+    pub fn create_from_docs_and_tfs(
+        doc_and_tfs: &[(u32, u32)],
+        fieldnorms: Option<&[u32]>,
+    ) -> SegmentPostings {
+        use crate::fieldnorm::FieldNormReader;
+        use crate::Score;
+        let mut buffer: Vec<u8> = Vec::new();
+        let fieldnorm_reader = fieldnorms.map(FieldNormReader::for_test);
+        let average_field_norm = fieldnorms
+            .map(|fieldnorms| {
+                if fieldnorms.len() == 0 {
+                    return 0.0;
+                }
+                let total_num_tokens: u64 = fieldnorms
+                    .iter()
+                    .map(|&fieldnorm| fieldnorm as u64)
+                    .sum::<u64>();
+                total_num_tokens as Score / fieldnorms.len() as f32
+            })
+            .unwrap_or(0.0);
+        let mut postings_serializer = PostingsSerializer::new(
+            &mut buffer,
+            average_field_norm,
+            true,
+            false,
+            fieldnorm_reader,
+        );
+        postings_serializer.new_term(doc_and_tfs.len() as u32);
+        for &(doc, tf) in doc_and_tfs {
+            postings_serializer.write_doc(doc, tf);
+        }
+        postings_serializer
+            .close_term(doc_and_tfs.len() as u32)
+            .unwrap();
+        let block_segment_postings = BlockSegmentPostings::from_data(
+            doc_and_tfs.len() as u32,
+            ReadOnlySource::from(buffer),
+            IndexRecordOption::WithFreqs,
+            IndexRecordOption::WithFreqs,
+        );
         SegmentPostings::from_block_postings(block_segment_postings, None)
     }
 

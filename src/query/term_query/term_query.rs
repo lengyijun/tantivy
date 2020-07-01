@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::term_weight::TermWeight;
 use crate::query::bm25::BM25Weight;
 use crate::query::Weight;

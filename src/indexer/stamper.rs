@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::Opstamp;
 use std::ops::Range;
 use std::sync::atomic::Ordering;
@@ -34,7 +35,7 @@ mod atomic_impl {
     use crate::Opstamp;
     /// Under other architecture, we rely on a mutex.
     use std::sync::atomic::Ordering;
-    use std::sync::RwLock;
+    use std::sync::SgxRwLock as RwLock;
 
     #[derive(Default)]
     pub struct AtomicU64Wrapper(RwLock<u64>);

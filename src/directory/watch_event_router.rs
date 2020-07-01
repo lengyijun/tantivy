@@ -1,7 +1,8 @@
+use std::prelude::v1::*;
 use futures::channel::oneshot;
 use futures::{Future, TryFutureExt};
 use std::sync::Arc;
-use std::sync::RwLock;
+use std::sync::SgxRwLock as RwLock;
 use std::sync::Weak;
 
 /// Cloneable wrapper for callbacks registered when watching files of a `Directory`.

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::operation::{AddOperation, UserOperation};
 use super::segment_updater::SegmentUpdater;
 use super::PreparedCommit;

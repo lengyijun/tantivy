@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use super::PhraseWeight;
 use crate::core::searcher::Searcher;
 use crate::query::bm25::BM25Weight;

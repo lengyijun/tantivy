@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::schema::IntOptions;
 use crate::schema::TextOptions;
 use std::ops::BitOr;

@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::common::{BinarySerializable, CountingWriter, FixedSize, HasLen, VInt};
 use crate::directory::error::Incompatibility;
 use crate::directory::FileSlice;
@@ -6,6 +7,8 @@ use crate::Version;
 use crc32fast::Hasher;
 use std::io;
 use std::io::Write;
+use std::string::String;
+use std::vec::Vec;
 
 const FOOTER_MAX_LEN: usize = 10_000;
 

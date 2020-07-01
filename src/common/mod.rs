@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 pub mod bitpacker;
 mod bitset;
 mod composite_file;
