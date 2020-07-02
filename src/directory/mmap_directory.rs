@@ -423,6 +423,7 @@ impl Directory for MmapDirectory {
         // We make sure that the file exists.
         let file: File = std::fs::OpenOptions::new()
             .write(true)
+            .create(true) 
             .open(&full_path)
             .map_err(LockError::IOError)?;
         if lock.is_blocking {
