@@ -23,7 +23,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::convert::From;
 use std::fmt;
-use std::fs::OpenOptions;
+//use std::fs::OpenOptions;
 use std::fs::{self, File};
 use std::io::{self, Seek, SeekFrom};
 use std::io::{BufWriter, Read, Write};
@@ -35,7 +35,8 @@ use std::sync::SgxMutex as Mutex;
 use std::sync::SgxRwLock as RwLock;
 use std::sync::Weak;
 use std::thread;
-use tempfile;
+use std::sgxfs::SgxFile;
+use std::sgxfs::OpenOptions;
 use tempfile::TempDir;
 
 /// Create a default io error given a string.
@@ -246,7 +247,7 @@ impl MmapDirectory {
         }
 
         let fd = open_opts.open(&self.inner.root_path)?;
-        fd.sync_all()?;
+        //fd.sync_all()?;
         Ok(())
     }
 
@@ -286,10 +287,10 @@ impl Drop for ReleaseLockFile {
 
 /// This Write wraps a File, but has the specificity of
 /// call `sync_all` on flush.
-struct SafeFileWriter(File);
+struct SafeFileWriter(SgxFile);
 
 impl SafeFileWriter {
-    fn new(file: File) -> SafeFileWriter {
+    fn new(file: SgxFile) -> SafeFileWriter {
         SafeFileWriter(file)
     }
 }
@@ -300,8 +301,8 @@ impl Write for SafeFileWriter {
     }
 
     fn flush(&mut self) -> io::Result<()> {
-        self.0.flush()?;
-        self.0.sync_all()
+        self.0.flush()
+        //self.0.sync_all()
     }
 }
 
@@ -365,7 +366,6 @@ impl Directory for MmapDirectory {
 
         let open_res = OpenOptions::new()
             .write(true)
-            .create_new(true)
             .open(full_path);
 
         let mut file = open_res.map_err(|err| {
@@ -421,9 +421,8 @@ impl Directory for MmapDirectory {
     fn acquire_lock(&self, lock: &Lock) -> Result<DirectoryLock, LockError> {
         let full_path = self.resolve_path(&lock.filepath);
         // We make sure that the file exists.
-        let file: File = OpenOptions::new()
+        let file: File = std::fs::OpenOptions::new()
             .write(true)
-            .create(true) //< if the file does not exist yet, create it.
             .open(&full_path)
             .map_err(LockError::IOError)?;
         if lock.is_blocking {
