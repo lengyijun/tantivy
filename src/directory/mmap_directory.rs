@@ -427,7 +427,24 @@ impl Directory for MmapDirectory {
         tempfile.write_all(content)?;
         tempfile.flush()?;
         let full_path = self.resolve_path(path);
-        tempfile.into_temp_path().persist(full_path)?;
+
+        // let meta_file = atomicwrites::AtomicFile::new(full_path, atomicwrites::AllowOverwrite);
+        // meta_file.write(|f| f.write_all(data))?;
+
+        let open_res = OpenOptions::new()
+            .write(true)
+            .update(true)
+            .open(&full_path);
+
+        let mut file = open_res.map_err(|err| {
+            if err.kind() == io::ErrorKind::AlreadyExists {
+                OpenWriteError::FileAlreadyExists(path.to_owned())
+            } else {
+                IOError::with_path(path.to_owned(), err).into()
+            }
+        });
+
+        file.unwrap().write(data)?;
         Ok(())
     }
 
