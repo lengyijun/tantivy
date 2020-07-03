@@ -46,30 +46,31 @@ pub(crate) fn make_io_err(msg: String) -> io::Error {
 
 /// Returns None iff the file exists, can be read, but is empty (and hence
 /// cannot be mmapped)
-fn open_mmap(full_path: &Path) -> result::Result<Option<Mmap>, OpenReadError> {
-    let file = File::open(full_path).map_err(|e| {
-        if e.kind() == io::ErrorKind::NotFound {
-            OpenReadError::FileDoesNotExist(full_path.to_owned())
-        } else {
-            OpenReadError::IOError(IOError::with_path(full_path.to_owned(), e))
-        }
-    })?;
-
-    let meta_data = file
-        .metadata()
-        .map_err(|e| IOError::with_path(full_path.to_owned(), e))?;
-    if meta_data.len() == 0 {
+// fn open_mmap(full_path: &Path) -> result::Result<Option<Mmap>, OpenReadError> {
+    // let file = SgxFile::open(full_path).map_err(|e| {
+        // if e.kind() == io::ErrorKind::NotFound {
+            // OpenReadError::FileDoesNotExist(full_path.to_owned())
+        // } else {
+            // OpenReadError::IOError(IOError::with_path(full_path.to_owned(), e))
+        // }
+    // })?;
+//
+    // let meta_data = file
+        // .metadata()
+        // .map_err(|e| IOError::with_path(full_path.to_owned(), e))?;
+    // if meta_data.len() == 0 {
         // if the file size is 0, it will not be possible
         // to mmap the file, so we return None
         // instead.
-        return Ok(None);
-    }
-    unsafe {
-        memmap::Mmap::map(&file)
-            .map(Some)
-            .map_err(|e| From::from(IOError::with_path(full_path.to_owned(), e)))
-    }
-}
+        // return Ok(None);
+    // }
+    // unsafe {
+        // memmap::Mmap::map(&file)
+            // .map(Some)
+            // .map_err(|e| From::from(IOError::with_path(full_path.to_owned(), e)))
+    // }
+//
+// }
 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CacheCounters {
@@ -122,23 +123,24 @@ impl MmapCache {
     }
 
     // Returns None if the file exists but as a len of 0 (and hence is not mmappable).
-    fn get_mmap(&mut self, full_path: &Path) -> Result<Option<Arc<BoxedData>>, OpenReadError> {
-        if let Some(mmap_weak) = self.cache.get(full_path) {
-            if let Some(mmap_arc) = mmap_weak.upgrade() {
-                self.counters.hit += 1;
-                return Ok(Some(mmap_arc));
-            }
-        }
-        self.cache.remove(full_path);
-        self.counters.miss += 1;
-        let mmap_opt = open_mmap(full_path)?;
-        Ok(mmap_opt.map(|mmap| {
-            let mmap_arc: Arc<BoxedData> = Arc::new(Box::new(mmap));
-            let mmap_weak = Arc::downgrade(&mmap_arc);
-            self.cache.insert(full_path.to_owned(), mmap_weak);
-            mmap_arc
-        }))
-    }
+    // fn get_mmap(&mut self, full_path: &Path) -> Result<Option<Arc<BoxedData>>, OpenReadError> {
+        // if let Some(mmap_weak) = self.cache.get(full_path) {
+            // if let Some(mmap_arc) = mmap_weak.upgrade() {
+                // self.counters.hit += 1;
+                // return Ok(Some(mmap_arc));
+            // }
+        // }
+        // self.cache.remove(full_path);
+        // self.counters.miss += 1;
+        // let mmap_opt = open_mmap(full_path)?;
+        // Ok(mmap_opt.map(|mmap| {
+            // let mmap_arc: Arc<BoxedData> = Arc::new(Box::new(mmap));
+            // let mmap_weak = Arc::downgrade(&mmap_arc);
+            // self.cache.insert(full_path.to_owned(), mmap_weak);
+            // mmap_arc
+        // }))
+    // }
+
 }
 
 /// Directory storing data in files, read via mmap.
@@ -228,7 +230,7 @@ impl MmapDirectory {
     /// In certain FS, this is required to persistently create
     /// a file.
     fn sync_directory(&self) -> Result<(), io::Error> {
-        let mut open_opts = OpenOptions::new();
+        let mut open_opts = std::fs::OpenOptions::new();
 
         // Linux needs read to be set, otherwise returns EINVAL
         // write must not be set, or it fails with EISDIR
@@ -247,7 +249,7 @@ impl MmapDirectory {
         }
 
         let fd = open_opts.open(&self.inner.root_path)?;
-        //fd.sync_all()?;
+        fd.sync_all()?;
         Ok(())
     }
 
@@ -322,19 +324,30 @@ impl Directory for MmapDirectory {
     fn open_read(&self, path: &Path) -> result::Result<ReadOnlySource, OpenReadError> {
         debug!("Open Read {:?}", path);
         let full_path = self.resolve_path(path);
+        // println!("{:?}",full_path);
+        let raw_data:Vec<u8>=match std::sgxfs::read(full_path){
+          Ok(t)=>{t}
+          _=>{
+            return Err(OpenReadError::FileDoesNotExist(path.to_owned()))
+          }
+        };
+        let t:BoxedData=Box::new(raw_data);
+        Ok( ReadOnlySource::from(Arc::new(t)) )
 
-        let mut mmap_cache = self.inner.mmap_cache.write().map_err(|_| {
-            let msg = format!(
-                "Failed to acquired write lock \
-                 on mmap cache while reading {:?}",
-                path
-            );
-            IOError::with_path(path.to_owned(), make_io_err(msg))
-        })?;
-        Ok(mmap_cache
-            .get_mmap(&full_path)?
-            .map(ReadOnlySource::from)
-            .unwrap_or_else(ReadOnlySource::empty))
+
+        // let mut mmap_cache = self.inner.mmap_cache.write().map_err(|_| {
+            // let msg = format!(
+                // "Failed to acquired write lock \
+                 // on mmap cache while reading {:?}",
+                // path
+            // );
+            // IOError::with_path(path.to_owned(), make_io_err(msg))
+        // })?;
+        // Ok(mmap_cache
+            // .get_mmap(&full_path)?
+            // .map(ReadOnlySource::from)
+            // .unwrap_or_else(ReadOnlySource::empty))
+
     }
 
     /// Any entry associated to the path in the mmap will be
