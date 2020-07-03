@@ -405,7 +405,7 @@ impl Directory for MmapDirectory {
     fn atomic_read(&self, path: &Path) -> Result<Vec<u8>, OpenReadError> {
         let full_path = self.resolve_path(path);
         let mut buffer = Vec::new();
-        match File::open(&full_path) {
+        match std::sgxfs::SgxFile::open(&full_path) {
             Ok(mut file) => {
                 file.read_to_end(&mut buffer)
                     .map_err(|e| IOError::with_path(path.to_owned(), e))?;
