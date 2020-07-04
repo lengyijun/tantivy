@@ -19,10 +19,9 @@ crc32fast = { git = "https://github.com/mesalock-linux/rust-crc32fast-sgx", bran
 once_cell = {git="https://github.com/lengyijun/once_cell"}
 regex = { git = "https://github.com/mesalock-linux/regex-sgx", branch = "master"}
 tantivy-fst = {git="https://github.com/lengyijun/fst-sgx"}
-memmap = {git="https://github.com/lengyijun/memmap-rs", optional=true}
+#memmap = {git="https://github.com/lengyijun/memmap-rs", optional=true}
 lz4 = {version="1.20", optional=true}
 snap = { git = "https://github.com/lengyijun/rust-snappy", branch = "master" }
-atomicwrites = {git="https://github.com/lengyijun/rust-atomicwrites", optional=true}
 tempfile = {git="https://github.com/lengyijun/tempfile"}
 log = { git = "https://github.com/mesalock-linux/log-sgx", branch = "master", features = ["kv_unstable"] }
 serde = { git = "https://github.com/mesalock-linux/serde-sgx", branch = "master", features = ["derive", "rc"] }
