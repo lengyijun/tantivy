@@ -15,7 +15,7 @@ use crate::directory::WatchCallbackList;
 use crate::directory::WatchHandle;
 use crate::directory::{TerminatingWrite, WritePtr};
 //use fs2::FileExt;
-use memmap::Mmap;
+//use memmap::Mmap;
 //use notify::RawEvent;
 //use notify::RecursiveMode;
 //use notify::Watcher;
