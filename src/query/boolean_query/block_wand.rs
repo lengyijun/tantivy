@@ -1,3 +1,4 @@
+use std::prelude::v1::*;
 use crate::query::term_query::TermScorer;
 use crate::query::Scorer;
 use crate::{DocId, DocSet, Score, TERMINATED};
