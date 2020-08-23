@@ -36,7 +36,7 @@ use std::sync::SgxRwLock as RwLock;
 use std::sync::Weak;
 use std::thread;
 use std::sgxfs::SgxFile;
-use std::sgxfs::OpenOptions;
+// use std::sgxfs::OpenOptions;
 use tempfile::TempDir;
 
 /// Create a default io error given a string.
@@ -373,7 +373,7 @@ impl Directory for MmapDirectory {
         debug!("Open Write {:?}", path);
         let full_path = self.resolve_path(path);
 
-        let open_res = OpenOptions::new()
+        let open_res = std::sgxfs::OpenOptions::new()
             .write(true)
             .open(full_path);
 
@@ -427,7 +427,7 @@ impl Directory for MmapDirectory {
         // let meta_file = atomicwrites::AtomicFile::new(full_path, atomicwrites::AllowOverwrite);
         // meta_file.write(|f| f.write_all(data))?;
 
-        let open_res = OpenOptions::new()
+        let open_res = std::sgxfs::OpenOptions::new()
             .write(true)
             .update(true)
             .open(&full_path);
